@@ -1,8 +1,10 @@
 var player;
+var arrows = [];
 var upPressed = false;
 var downPressed = false;
 var leftPressed = false;
 var rightPressed = false;
+var spacePressed = false;
 
 function setPlayerDirection(dir) {
   // Display the walk animation for the correct direction, remove the other directions
@@ -59,59 +61,182 @@ function move() {
     player.style.top = top + "px";
   }
 
-  //If any of the keys are being pressed, display the walk animation
+  // If any of the keys are being pressed, display the walk animation
   if (leftPressed || rightPressed || upPressed || downPressed) {
     player.classList.add("walk");
     player.classList.remove("stand");
   }
-  //Otherwise, no keys are being pressed, display stand
+  // Otherwise, no keys are being pressed, display stand
   else {
     player.classList.add("stand");
     player.classList.remove("walk");
   }
 }
 
-function keyUp(event) {
-  if (event.keyCode == 37) {
-    leftPressed = false;
+function fire() {
+  var playerX = player.offsetLeft;
+  var playerY = player.offsetTop;
+
+  if (spacePressed) {
+    var arrowsContainer = document.getElementsByClassName("arrows")[0];
+    var arrow = document.createElement("div");
+    var arrowTN = document.createTextNode(" ");
+
+    arrow.classList.add("arrow");
+    arrow.style.top = playerY + 25 + "px";
+    arrow.style.left = playerX + player.clientWidth + "px";
+
+    arrow.appendChild(arrowTN);
+    arrowsContainer.appendChild(arrow);
+
+    arrows.push(arrow);
+
+    player.classList.add("fire");
+  } else {
+    player.classList.remove("fire");
+  }
+}
+
+function arrowMotion() {
+  var arrows = document.getElementsByClassName("arrow");
+
+  for (var i = 0; i < arrows.length; i++) {
+    var currentArrow = arrows[i];
+    var currentArrowX = currentArrow.offsetLeft;
+
+    var hasCollided = checkArrowCollision(currentArrow);
+
+    if (!hasCollided) {
+      currentArrow.style.left = currentArrowX + 1 + "px";
+    }
+  }
+}
+
+function checkArrowCollision(arrow) {
+  var arrowCollided = false;
+  var arrowX = arrow.offsetLeft;
+  var arrowY = arrow.offsetTop;
+  var arrowHeight = arrow.clientHeight;
+  var arrowWidth = arrow.clientWidth;
+
+  var arrowTopLeft = document.elementFromPoint(arrowX - 1, arrowY - 1);
+  var arrowTopRight = document.elementFromPoint(
+    arrowX + arrowWidth + 1,
+    arrowY - 1
+  );
+  var arrowBottomLeft = document.elementFromPoint(
+    arrowX - 1,
+    arrowY + arrowHeight + 1
+  );
+  var arrowBottomRight = document.elementFromPoint(
+    arrowX + arrowWidth + 1,
+    arrowY + arrowHeight + 1
+  );
+
+  if (
+    arrowX > window.innerWidth - arrowWidth ||
+    arrowY > window.innerHeight - arrowHeight
+  ) {
+    arrowCollided = true;
+  } else if (
+    arrowTopLeft.classList.contains("blocking") &&
+    arrowTopRight.classList.contains("blocking") &&
+    arrowBottomLeft.classList.contains("blocking") &&
+    arrowBottomRight.classList.contains("blocking")
+  ) {
+    arrowCollided = true;
+  } else {
+    arrowCollided = false;
   }
 
-  if (event.keyCode == 39) {
+  return arrowCollided;
+}
+
+function setHead(event) {
+  if (event.srcElement.id != "") {
+    document
+      .getElementById("player")
+      .getElementsByClassName("head")[0].style.backgroundImage =
+      "url(./public/images/" + event.srcElement.id + ".png)";
+  }
+}
+
+function setBody(event) {
+  if (event.srcElement.id != "") {
+    document
+      .getElementById("player")
+      .getElementsByClassName("body")[0].style.backgroundImage =
+      "url(./public/images/" + event.srcElement.id + ".png)";
+  }
+}
+
+function keyUp(event) {
+  if (event.keyCode == 32) {
+    spacePressed = false;
+  }
+
+  if (event.keyCode == 37 || event.keyCode == 65) {
+    leftPressed = false;
+  }
+  87;
+  if (event.keyCode == 39 || event.keyCode == 68) {
     rightPressed = false;
   }
 
-  if (event.keyCode == 38) {
+  if (event.keyCode == 38 || event.keyCode == 87) {
     upPressed = false;
   }
 
-  if (event.keyCode == 40) {
+  if (event.keyCode == 40 || event.keyCode == 83) {
     downPressed = false;
   }
 }
 
 function keyDown(event) {
-  if (event.keyCode == 37) {
+  if (event.keyCode == 32) {
+    spacePressed = true;
+  }
+
+  if (event.keyCode == 37 || event.keyCode == 65) {
     leftPressed = true;
   }
 
-  if (event.keyCode == 39) {
+  if (event.keyCode == 39 || event.keyCode == 68) {
     rightPressed = true;
   }
 
-  if (event.keyCode == 38) {
+  if (event.keyCode == 38 || event.keyCode == 87) {
     upPressed = true;
   }
 
-  if (event.keyCode == 40) {
+  if (event.keyCode == 40 || event.keyCode == 83) {
     downPressed = true;
   }
 }
 
 function gameStart() {
   player = document.getElementById("player");
+
   setInterval(move, 10);
+  setInterval(fire, 500);
+  setInterval(arrowMotion, 10);
+
   document.addEventListener("keydown", keyDown);
   document.addEventListener("keyup", keyUp);
+
+  player.addEventListener("click", function() {
+    document.getElementsByTagName("aside")[0].classList.add("open");
+  });
+  document.getElementById("closeside").addEventListener("click", function() {
+    document.getElementsByTagName("aside")[0].classList.remove("open");
+  });
+
+  document
+    .getElementsByClassName("heads")[0]
+    .addEventListener("click", setHead);
+  document
+    .getElementsByClassName("bodies")[0]
+    .addEventListener("click", setBody);
 }
 
 document.addEventListener("DOMContentLoaded", gameStart);
