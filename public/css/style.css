@@ -1,0 +1,31 @@
+aside {
+  z-index: 100;
+  transition: 0.15s transform;
+  transform: scaleX(0);
+  transform-origin: right;
+}
+
+aside.open {
+  transform: scaleX(1);
+}
+
+#closeside {
+  height: 2rem;
+  width: 2rem;
+  background-color: rgb(187, 187, 187, 0.5);
+  border: none;
+  padding: 0;
+  line-height: 1;
+  font-size: 1.5rem;
+  border-radius: 50%;
+}
+
+#closeside:hover {
+  background-color: #bbbbbb;
+}
+
+#closeside:focus {
+  outline: none;
+  border: 2px dotted rgb(44, 111, 255);
+  background-color: #bbbbbb;
+}
