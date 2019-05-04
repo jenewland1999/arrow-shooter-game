@@ -1,5 +1,4 @@
 var player;
-var arrows = [];
 var upPressed = false;
 var downPressed = false;
 var leftPressed = false;
@@ -17,7 +16,151 @@ function setPlayerDirection(dir) {
   player.classList.add(dir);
 }
 
-function move() {
+function getPlayerDirection() {
+  var playerDirection = "";
+
+  if (player.classList.contains("up")) {
+    playerDirection = "up";
+  }
+
+  if (player.classList.contains("right")) {
+    playerDirection = "right";
+  }
+
+  if (player.classList.contains("down")) {
+    playerDirection = "down";
+  }
+
+  if (player.classList.contains("left")) {
+    playerDirection = "left";
+  }
+
+  return playerDirection;
+}
+
+function fireProjectile() {
+  var arrowContainer = document.getElementById("arrows");
+  var arrow = document.createElement("div");
+
+  arrow.classList.add("arrow");
+
+  var VELOCITY = 0.5;
+
+  var dirX = 5 * VELOCITY;
+  var dirY = 0 * VELOCITY;
+  var playerDirection = getPlayerDirection();
+
+  if (playerDirection == "up") {
+    arrow.classList.add("up");
+    arrow.style.top = player.offsetTop - 32 + "px";
+    arrow.style.left = player.offsetLeft + "px";
+    dirX = 0;
+    dirY = -5;
+  }
+  if (playerDirection == "down") {
+    arrow.classList.add("down");
+    arrow.style.top = player.offsetTop + player.clientHeight + 32 + "px";
+    arrow.style.left = player.offsetLeft + "px";
+    dirX = 0;
+    dirY = 5;
+  }
+  if (playerDirection == "left") {
+    arrow.classList.add("left");
+    arrow.style.top = player.offsetTop + player.clientHeight / 2 + "px";
+    arrow.style.left = player.offsetLeft - player.clientWidth + "px";
+    dirX = -5;
+    dirY = 0;
+  }
+  if (playerDirection == "right") {
+    arrow.classList.add("right");
+    arrow.style.top = player.offsetTop + player.clientHeight / 2 + "px";
+    arrow.style.left = player.offsetLeft + player.clientWidth + "px";
+    dirX = 5;
+    dirY = 0;
+  }
+
+  arrowContainer.appendChild(arrow);
+
+  setInterval(function() {
+    var arrowPosX = arrow.offsetLeft;
+    var arrowPosY = arrow.offsetTop;
+
+    var windowColliding = projectileCollisionHandler(arrow);
+    var objectColliding = projectileBoundingBoxHandler(arrow);
+
+    if (!windowColliding && !objectColliding) {
+      arrow.style.left = arrowPosX + dirX + "px";
+      arrow.style.top = arrowPosY + dirY + "px";
+    } else {
+      setTimeout(function() {
+        arrow.remove();
+      }, 1000);
+    }
+  }, 10);
+}
+
+function projectileCollisionHandler(arrow) {
+  return (
+    parseInt(arrow.style.top) < 0 ||
+    parseInt(arrow.style.left) + arrow.offsetWidth > window.innerWidth ||
+    parseInt(arrow.style.top) + arrow.offsetHeight > window.innerHeight ||
+    parseInt(arrow.style.left) < 0
+  );
+}
+
+function projectileBoundingBoxHandler(arrow) {
+  var colliding = false;
+
+  var arrowX = arrow.offsetLeft;
+  var arrowY = arrow.offsetTop;
+  var arrowHeight = arrow.offsetHeight;
+  var arrowWidth = arrow.offsetWidth;
+
+  var arrowTopLeft = document.elementFromPoint(arrowX - 1, arrowY - 1);
+  var arrowTopRight = document.elementFromPoint(
+    arrowX + arrowWidth + 1,
+    arrowY - 1
+  );
+  var arrowBottomLeft = document.elementFromPoint(
+    arrowX - 1,
+    arrowY + arrowHeight + 1
+  );
+  var arrowBottomRight = document.elementFromPoint(
+    arrowX + arrowWidth + 1,
+    arrowY + arrowHeight + 1
+  );
+
+  if (
+    arrowTopLeft != undefined &&
+    arrowTopRight != undefined &&
+    arrowBottomLeft != undefined &&
+    arrowBottomRight != undefined
+  ) {
+    if (
+      !arrowTopLeft.classList.contains("blocking") &&
+      !arrowTopRight.classList.contains("blocking") &&
+      !arrowBottomLeft.classList.contains("blocking") &&
+      !arrowBottomRight.classList.contains("blocking")
+    ) {
+      colliding = false;
+    } else {
+      colliding = true;
+    }
+  }
+
+  return colliding;
+}
+
+function projectileHandler() {
+  if (spacePressed) {
+    fireProjectile();
+    player.classList.add("fire");
+  } else {
+    player.classList.remove("fire");
+  }
+}
+
+function movementHandler() {
   var left = player.offsetLeft;
   var top = player.offsetTop;
 
@@ -51,105 +194,34 @@ function move() {
   // If the element that the player is about to walk over contains the class "blocking" then
   // the player is not moved.
   // The player will only be moved to coordinates `top` and `left` if the element in that position is not blocking
+
   if (
-    !playerTopLeft.classList.contains("blocking") &&
-    !playerTopRight.classList.contains("blocking") &&
-    !playerBottomLeft.classList.contains("blocking") &&
-    !playerBottomRight.classList.contains("blocking")
+    playerTopLeft != undefined &&
+    playerTopRight != undefined &&
+    playerBottomLeft != undefined &&
+    playerBottomRight != undefined
   ) {
-    player.style.left = left + "px";
-    player.style.top = top + "px";
-  }
+    if (
+      !playerTopLeft.classList.contains("blocking") &&
+      !playerTopRight.classList.contains("blocking") &&
+      !playerBottomLeft.classList.contains("blocking") &&
+      !playerBottomRight.classList.contains("blocking")
+    ) {
+      player.style.left = left + "px";
+      player.style.top = top + "px";
+    }
 
-  // If any of the keys are being pressed, display the walk animation
-  if (leftPressed || rightPressed || upPressed || downPressed) {
-    player.classList.add("walk");
-    player.classList.remove("stand");
-  }
-  // Otherwise, no keys are being pressed, display stand
-  else {
-    player.classList.add("stand");
-    player.classList.remove("walk");
-  }
-}
-
-function fire() {
-  var playerX = player.offsetLeft;
-  var playerY = player.offsetTop;
-
-  if (spacePressed) {
-    var arrowsContainer = document.getElementsByClassName("arrows")[0];
-    var arrow = document.createElement("div");
-    var arrowTN = document.createTextNode(" ");
-
-    arrow.classList.add("arrow");
-    arrow.style.top = playerY + 25 + "px";
-    arrow.style.left = playerX + player.clientWidth + "px";
-
-    arrow.appendChild(arrowTN);
-    arrowsContainer.appendChild(arrow);
-
-    arrows.push(arrow);
-
-    player.classList.add("fire");
-  } else {
-    player.classList.remove("fire");
-  }
-}
-
-function arrowMotion() {
-  var arrows = document.getElementsByClassName("arrow");
-
-  for (var i = 0; i < arrows.length; i++) {
-    var currentArrow = arrows[i];
-    var currentArrowX = currentArrow.offsetLeft;
-
-    var hasCollided = checkArrowCollision(currentArrow);
-
-    if (!hasCollided) {
-      currentArrow.style.left = currentArrowX + 1 + "px";
+    // If any of the keys are being pressed, display the walk animation
+    if (leftPressed || rightPressed || upPressed || downPressed) {
+      player.classList.add("walk");
+      player.classList.remove("stand");
+    }
+    // Otherwise, no keys are being pressed, display stand
+    else {
+      player.classList.add("stand");
+      player.classList.remove("walk");
     }
   }
-}
-
-function checkArrowCollision(arrow) {
-  var arrowCollided = false;
-  var arrowX = arrow.offsetLeft;
-  var arrowY = arrow.offsetTop;
-  var arrowHeight = arrow.clientHeight;
-  var arrowWidth = arrow.clientWidth;
-
-  var arrowTopLeft = document.elementFromPoint(arrowX - 1, arrowY - 1);
-  var arrowTopRight = document.elementFromPoint(
-    arrowX + arrowWidth + 1,
-    arrowY - 1
-  );
-  var arrowBottomLeft = document.elementFromPoint(
-    arrowX - 1,
-    arrowY + arrowHeight + 1
-  );
-  var arrowBottomRight = document.elementFromPoint(
-    arrowX + arrowWidth + 1,
-    arrowY + arrowHeight + 1
-  );
-
-  if (
-    arrowX > window.innerWidth - arrowWidth ||
-    arrowY > window.innerHeight - arrowHeight
-  ) {
-    arrowCollided = true;
-  } else if (
-    arrowTopLeft.classList.contains("blocking") &&
-    arrowTopRight.classList.contains("blocking") &&
-    arrowBottomLeft.classList.contains("blocking") &&
-    arrowBottomRight.classList.contains("blocking")
-  ) {
-    arrowCollided = true;
-  } else {
-    arrowCollided = false;
-  }
-
-  return arrowCollided;
 }
 
 function setHead(event) {
@@ -178,7 +250,7 @@ function keyUp(event) {
   if (event.keyCode == 37 || event.keyCode == 65) {
     leftPressed = false;
   }
-  87;
+
   if (event.keyCode == 39 || event.keyCode == 68) {
     rightPressed = false;
   }
@@ -217,9 +289,8 @@ function keyDown(event) {
 function gameStart() {
   player = document.getElementById("player");
 
-  setInterval(move, 10);
-  setInterval(fire, 500);
-  setInterval(arrowMotion, 10);
+  setInterval(movementHandler, 10);
+  setInterval(projectileHandler, 500);
 
   document.addEventListener("keydown", keyDown);
   document.addEventListener("keyup", keyUp);
