@@ -1,3 +1,3 @@
-# CSY1018 Web Development - Assignment 02
+# Arrow Shooter Game
 
-An in-browser game written in JavaScript.
+A bird's-eye view, arrow-shooting game built using HTML, CSS and JavaScript.
