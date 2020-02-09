@@ -1,89 +1,89 @@
 aside {
-    z-index: 100000;
-    transition: 0.15s transform;
-    transform: scaleX(0);
-    transform-origin: right;
+  z-index: 100000;
+  transition: 0.15s transform;
+  transform: scaleX(0);
+  transform-origin: right;
 }
 
 aside.open {
-    transform: scaleX(1);
+  transform: scaleX(1);
 }
 
 #closeside {
-    height: 2rem;
-    width: 2rem;
-    background-color: rgb(187, 187, 187, 0.5);
-    border: none;
-    padding: 0;
-    line-height: 1;
-    font-size: 1.5rem;
-    border-radius: 50%;
+  height: 2rem;
+  width: 2rem;
+  background-color: rgb(187, 187, 187, 0.5);
+  border: none;
+  padding: 0;
+  line-height: 1;
+  font-size: 1.5rem;
+  border-radius: 50%;
 }
 
 #closeside:hover {
-    background-color: #bbbbbb;
+  background-color: #bbbbbb;
 }
 
 #closeside:focus {
-    outline: none;
-    border: 2px dotted rgb(44, 111, 255);
-    background-color: #bbbbbb;
+  outline: none;
+  border: 2px dotted rgb(44, 111, 255);
+  background-color: #bbbbbb;
 }
 
 #gameOverlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.75);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.75);
 }
 
 .message {
-    font-size: 4rem;
-    font-family: cursive;
-    text-transform: uppercase;
-    color: #ffffff;
-    text-align: center;
-    letter-spacing: 1.15px;
-    user-select: none;
+  font-size: 4rem;
+  font-family: cursive;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-align: center;
+  letter-spacing: 1.15px;
+  user-select: none;
 }
 
 .tree {
-    height: 160px;
-    width: 128px;
-    background-image: url(../images/tree.png);
-    background-repeat: no-repeat;
-    background-size: contain;
+  height: 160px;
+  width: 128px;
+  background-image: url(../images/tree.png);
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .hud {
-    z-index: 9999;
+  z-index: 9999;
 }
 
 .button {
-    background: transparent;
-    border: 3px solid #fff;
-    border-radius: 16px;
-    font-size: 1.5rem;
-    color: #fff;
-    font-family: cursive;
-    padding: 0.5rem 2rem;
+  background: transparent;
+  border: 3px solid #fff;
+  border-radius: 16px;
+  font-size: 1.5rem;
+  color: #fff;
+  font-family: cursive;
+  padding: 0.5rem 2rem;
 }
 
 .button.success {
-    background: #3ae256;
+  background: #3ae256;
 }
 
 .button.danger {
-    background: #f12c2c;
+  background: #f12c2c;
 }
 
 #gameOverlay.hide {
-    display: none;
+  display: none;
 }
