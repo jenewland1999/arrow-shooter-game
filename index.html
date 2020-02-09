@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
     <title>CSY1018 Web Development - Assignment 02</title>
@@ -41,117 +41,25 @@
       </aside>
 
       <div class="hud">
-        <ul class="health">
-          <li></li>
-          <li></li>
-          <li></li>
-        </ul>
+        <ul class="health"></ul>
       </div>
 
       <div id="player" class="character stand down">
         <div class="head"></div>
-
         <div class="body"></div>
-
         <div class="weapon bow"></div>
       </div>
 
-      <div id="enemies">
-        <div class="enemy grey stand left appear" style="left: 80vw; top: 10vh">
-          <div class="head"></div>
-          <div class="body"></div>
-          <div class="weapon bow"></div>
-        </div>
+      <div id="enemies"></div>
 
-        <div class="enemy grey stand left appear" style="left: 80vw; top: 20vh">
-          <div class="head"></div>
-          <div class="body"></div>
-          <div class="weapon bow"></div>
-        </div>
-
-        <div class="enemy grey stand left appear" style="left: 80vw; top: 30vh">
-          <div class="head"></div>
-          <div class="body"></div>
-          <div class="weapon bow"></div>
-        </div>
-
-        <div class="enemy grey stand left appear" style="left: 80vw; top: 40vh">
-          <div class="head"></div>
-          <div class="body"></div>
-          <div class="weapon bow"></div>
-        </div>
-
-        <div class="enemy grey stand left appear" style="left: 80vw; top: 50vh">
-          <div class="head"></div>
-          <div class="body"></div>
-          <div class="weapon bow"></div>
-        </div>
-
-        <div class="enemy grey stand left appear" style="left: 80vw; top: 60vh">
-          <div class="head"></div>
-          <div class="body"></div>
-          <div class="weapon bow"></div>
-        </div>
-
-        <div class="enemy grey stand left appear" style="left: 80vw; top: 70vh">
-          <div class="head"></div>
-          <div class="body"></div>
-          <div class="weapon bow"></div>
-        </div>
-
-        <div class="enemy grey stand left appear" style="left: 80vw; top: 80vh">
-          <div class="head"></div>
-          <div class="body"></div>
-          <div class="weapon bow"></div>
-        </div>
-
-        <div class="enemy grey stand left appear" style="left: 80vw; top: 90vh">
-          <div class="head"></div>
-          <div class="body"></div>
-          <div class="weapon bow"></div>
-        </div>
-      </div>
-
-      <div id="trees">
-        <img src="./public/images/tree.png" class="tree blocking" />
-        <img
-          src="./public/images/tree.png"
-          class="tree blocking"
-          style="left: 700px; top: 200px"
-        />
-        <img
-          src="./public/images/tree.png"
-          class="tree blocking"
-          style="left: 250px; top: 50px"
-        />
-        <img
-          src="./public/images/tree.png"
-          class="tree blocking"
-          style="left: 900px; top: 450px"
-        />
-        <img
-          src="./public/images/tree.png"
-          class="tree blocking"
-          style="left: 500px; top: 500px"
-        />
-        <img
-          src="./public/images/tree.png"
-          class="tree blocking"
-          style="left: 200px; top: 800px"
-        />
-        <img
-          src="./public/images/tree.png"
-          class="tree blocking"
-          style="left: 900px; top: 800px"
-        />
-
-        <div
-          class="trees blocking"
-          style="background-image: url(./public/images/tree.png); width: 200px; height: 100vh; float: right"
-        ></div>
-      </div>
+      <div id="trees"></div>
 
       <div id="arrows"></div>
+
+      <div id="gameOverlay">
+        <h2 class="message">&nbsp;</h2>
+        <button class="button">&nbsp;</button>
+      </div>
     </div>
   </body>
 </html>
