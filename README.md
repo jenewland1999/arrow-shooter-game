@@ -1,3 +1,3 @@
 # Arrow Shooter Game
 
-A bird's-eye view, arrow-shooting game built using HTML, CSS and JavaScript.
+A bird's-eye view arrow-shooting game built using HTML, CSS and JavaScript.
